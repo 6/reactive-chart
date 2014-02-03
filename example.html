@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="HandsOnChartModule">
+<head>
+  <meta charset="utf-8">
+  <title>handsonchart example</title>
+  <link rel="stylesheet" href="vendor/jquery.handsontable.full.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="vendor/chart.js"></script>
+  <script src="vendor/jquery.handsontable.full.js"></script>
+
+  <link rel="stylesheet" href="handsonchart.css">
+  <script src="handsonchart.js"></script>
+</head>
+<body ng-controller="ExampleController">
+
+  <handsonchart></handsonchart>
+
+<script>
+var ExampleController = function($scope) {
+  $scope.handsonchart = {
+    data: []
+  };
+};
+</script>
+
+</body>
+</html>
