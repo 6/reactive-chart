@@ -1,4 +1,4 @@
-angular.module('HandsOnChartModule', []).directive('handsonchart', function() {
+angular.module('ReactiveChartModule', []).directive('reactiveChart', function() {
   var $scope, ctx, canvas, spreadsheet, $spreadsheet, lastSelection, swapAxes, graphType;
 
   var clearVisualization = function() {
@@ -19,8 +19,8 @@ angular.module('HandsOnChartModule', []).directive('handsonchart', function() {
       return;
     }
 
-    swapAxes = $scope.handsonchart.swapAxes || col1 === col2,
-    graphType = $scope.handsonchart.graphType || 'line';
+    swapAxes = $scope.reactiveChart.swapAxes || col1 === col2,
+    graphType = $scope.reactiveChart.graphType || 'line';
 
     var selectionData = spreadsheet.getData(row1, col1, row2, col2),
         legendLabels = [],
@@ -60,7 +60,7 @@ angular.module('HandsOnChartModule', []).directive('handsonchart', function() {
       rgb = [rgb.r, rgb.g, rgb.b].join(",");
 
       var legendTitle = null;
-      if ($scope.handsonchart.showLegend) {
+      if ($scope.reactiveChart.showLegend) {
         legendTitle = data.legend[i];
       }
       if (graphType === 'bar') {
@@ -123,7 +123,7 @@ angular.module('HandsOnChartModule', []).directive('handsonchart', function() {
     }
     var datasets = getChartDatasets(data);
 
-    if (graphType !== 'pie' && !$scope.handsonchart.showXAxisLabels) {
+    if (graphType !== 'pie' && !$scope.reactiveChart.showXAxisLabels) {
       data.xAxis = [];
       for(var i = 0; i < datasets[0].data.length; i++) {
         data.xAxis.push("");
@@ -135,17 +135,17 @@ angular.module('HandsOnChartModule', []).directive('handsonchart', function() {
 
   return {
     restrict: 'AE',
-    template: '<div class="handsonchart">' +
-                '<div class="handsonchart-spreadsheet"></div>' +
-                '<canvas class="handsonchart-visualization"></canvas>' +
+    template: '<div class="reactive-chart">' +
+                '<div class="reactive-chart-spreadsheet"></div>' +
+                '<canvas class="reactive-chart-visualization"></canvas>' +
               '</div>',
     link: function(scope, el, attr) {
       $scope = scope;
-      canvas = el[0].querySelector(".handsonchart-visualization");
+      canvas = el[0].querySelector(".reactive-chart-visualization");
       ctx = canvas.getContext("2d");
-      $spreadsheet = $('.handsonchart-spreadsheet');
+      $spreadsheet = $('.reactive-chart-spreadsheet');
       $spreadsheet.handsontable({
-        data: scope.handsonchart.data,
+        data: scope.reactiveChart.data,
         minSpareRows: 1,
         minRows: 5,
         minCols: 6,

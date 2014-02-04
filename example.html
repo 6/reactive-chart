@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="HandsOnChartModule">
+<html ng-app="ReactiveChartModule">
 <head>
   <meta charset="utf-8">
-  <title>handsonchart example</title>
+  <title>reactive-chart example</title>
   <link rel="stylesheet" href="vendor/jquery.handsontable.full.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -17,16 +17,16 @@
     html, body { width: 100%; height: 100%; margin: 0; padding: 0;}
   </style>
 
-  <link rel="stylesheet" href="handsonchart.css">
-  <script src="handsonchart.js"></script>
+  <link rel="stylesheet" href="reactive-chart.css">
+  <script src="reactive-chart.js"></script>
 </head>
 <body ng-controller="ExampleController">
 
-  <handsonchart></handsonchart>
+  <reactive-chart></reactive-chart>
 
 <script>
 var ExampleController = function($scope) {
-  $scope.handsonchart = {
+  $scope.reactiveChart = {
     swapAxes: false,
     showLegend: false,
     showXAxisLabels: true,
