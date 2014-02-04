@@ -1,0 +1,22 @@
+.handsonchart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.handsonchart-spreadsheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  background: pink;
+}
+
+.handsonchart-visualization {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  background: yellow;
+}
