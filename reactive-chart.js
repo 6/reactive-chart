@@ -7,6 +7,10 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
 
   var getSelectionData = function() {
     var selection = spreadsheet.getSelected();
+    if(!selection) {
+      clearVisualization();
+      return;
+    }
     lastSelection = selection;
     var row1 = selection[0],
         col1 = selection[1],
@@ -158,6 +162,11 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
         afterDeselect: clearVisualization
       });
       spreadsheet = $spreadsheet.handsontable("getInstance");
+
+      scope.$watch('reactiveChart.data', function() {
+        clearVisualization();
+        renderVisualization();
+      });
     }
   };
 });
