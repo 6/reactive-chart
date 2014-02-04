@@ -1,5 +1,5 @@
 angular.module('ReactiveChartModule', []).directive('reactiveChart', function() {
-  var $scope, ctx, canvas, spreadsheet, $spreadsheet, swapAxes, graphType;
+  var $scope, ctx, canvas, graphType;
 
   var clearVisualization = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -22,8 +22,6 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
       return;
     }
 
-    swapAxes = $scope.reactiveChart.swapAxes || col1 === col2,
-    graphType = $scope.reactiveChart.graphType || 'line';
 
     var selectionData = spreadsheet.getData(row1, col1, row2, col2),
         legendLabels = [],
@@ -99,17 +97,17 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
     return datasets;
   };
 
-  var renderChart = function(data, datasets) {
+  var renderChart = function(scope) {
     var chartData = {},
         chartOptions = {},
         chartClass;
     if (graphType === 'pie') {
       chartClass = 'Pie';
-      chartData = datasets;
+      chartData = scope.datasets;
     }
     else if (graphType === 'bar') {
       chartClass = 'Bar';
-      chartData = {labels: data.xAxis, datasets: datasets};
+      chartData = {labels: scope.labels, datasets: scope.datasets};
     }
     else {
       chartClass = 'Line';
@@ -138,29 +136,12 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
 
   return {
     restrict: 'AE',
-    template: '<div class="reactive-chart">' +
-                '<div class="reactive-chart-spreadsheet"></div>' +
-                '<canvas class="reactive-chart-visualization"></canvas>' +
-              '</div>',
+    template: '<canvas class="reactive-chart"></canvas>',
     link: function(scope, el, attr) {
       $scope = scope;
-      canvas = el[0].querySelector(".reactive-chart-visualization");
+      canvas = el[0].querySelector(".reactive-chart");
       ctx = canvas.getContext("2d");
-      $spreadsheet = $('.reactive-chart-spreadsheet');
-      $spreadsheet.handsontable({
-        data: scope.reactiveChart.data,
-        minSpareRows: 1,
-        minRows: 5,
-        minCols: 6,
-        stretchH: 'all',
-        contextMenu: true,
-        manualColumnResize: true,
-        colHeaders: true,
-        rowHeaders: true,
-        afterSelectionEnd: renderVisualization,
-        afterDeselect: clearVisualization
-      });
-      spreadsheet = $spreadsheet.handsontable("getInstance");
+      graphType = $scope.reactiveChart.graphType || 'line';
 
       scope.$watch('reactiveChart.data', function() {
         clearVisualization();

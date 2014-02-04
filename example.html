@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>reactive-chart example</title>
-  <link rel="stylesheet" href="vendor/jquery.handsontable.full.css">
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script src="vendor/chart.js"></script>
   <script src="vendor/underscore.js"></script>
-  <script src="vendor/jquery.handsontable.full.js"></script>
   <script src="helpers/chart-ext.js"></script>
   <script src="helpers/array-ext.js"></script>
   <script src="helpers/color-helpers.js"></script>
@@ -27,17 +25,16 @@
 <script>
 var ExampleController = function($scope) {
   $scope.reactiveChart = {
-    swapAxes: false,
-    showLegend: false,
-    showXAxisLabels: true,
     graphType: 'bar',
-    data: [
-      ["", "Maserati", "Mazda", "Mercedes", "Mini", "Mitsubishi"],
-      ["2009", 0, 2941, 4303, 354, 5814],
-      ["2010", 5, 2905, 2867, 412, 5284],
-      ["2011", 4, 2517, 4822, 552, 6127],
-      ["2012", 2, 2422, 5399, 776, 4151]
+    labels: ["Mazda", "Mercedes"],
+    datasets: [
+      [2517, 4822],
+      [2422, 5399],
+      [null, null]
     ]
+    // graphType: 'pie',
+    // datasets: [
+    // ]
   };
 };
 </script>
