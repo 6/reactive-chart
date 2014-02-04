@@ -1,5 +1,5 @@
 angular.module('ReactiveChartModule', []).directive('reactiveChart', function() {
-  var $scope, ctx, canvas, spreadsheet, $spreadsheet, lastSelection, swapAxes, graphType;
+  var $scope, ctx, canvas, spreadsheet, $spreadsheet, swapAxes, graphType;
 
   var clearVisualization = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -11,7 +11,6 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
       clearVisualization();
       return;
     }
-    lastSelection = selection;
     var row1 = selection[0],
         col1 = selection[1],
         row2 = selection[2],
