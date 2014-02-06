@@ -5,7 +5,7 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
     return !(value === null || typeof value === "undefined" || String(value).match(/^\s*$/));
   };
 
-  var clearVisualization = function() {
+  var clearChart = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
@@ -103,63 +103,49 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
   var renderChart = function(scope) {
     var datasets = scope.reactiveChart.datasets,
         labels = scope.reactiveChart.labels,
-        graphType = scope.reactiveChart.graphType || 'line';
+        graphType = scope.reactiveChart.graphType || 'line',
+        options = scope.reactiveChart.options;
 
-    if(!datasets) {
+    // Handle invalid/null data
+    if(!_.isArray(datasets)) {
       return;
     }
-
     var newDatasets = [];
     _.each(datasets, function(dataset) {
-      var areAllNull = _.all(dataset, function(datapoint) {
+      var areAnyNull = _.any(dataset, function(datapoint) {
         return !isPresent(datapoint) || _.isNaN(datapoint);
       });
-      if (!areAllNull) {
+      if (!areAnyNull && dataset.length > 0) {
         newDatasets.push(dataset);
       }
     });
     datasets = newDatasets;
 
-    if(datasets.length === 0 || datasets[0].length === 0) {
+    if(datasets.length === 0) {
       return;
     }
 
     console.log(labels, datasets);
 
     var chartData = {},
-        chartOptions = {},
+        chartOptions,
         chartClass;
     if (graphType === 'pie') {
       chartClass = 'Pie';
       chartData = datasets;
+      chartOptions = options || {};
     }
     else if (graphType === 'bar') {
       chartClass = 'Bar';
       chartData = {labels: labels, datasets: datasets};
+      chartOptions = options || {};
     }
     else {
       chartClass = 'Line';
       chartData = {labels: labels, datasets: datasets};
-      chartOptions = {bezierCurve: true, datasetStroke: true};
+      chartOptions = options || {bezierCurve: true, datasetStroke: true};
     }
     new Chart(ctx)[chartClass](chartData, chartOptions);
-  };
-
-  var renderVisualization = function() {
-    var data = getSelectionData();
-    if(!data) {
-      return; // No data selected
-    }
-    var datasets = getChartDatasets(data);
-
-    if (graphType !== 'pie' && !$scope.reactiveChart.showXAxisLabels) {
-      data.xAxis = [];
-      for(var i = 0; i < datasets[0].data.length; i++) {
-        data.xAxis.push("");
-      }
-    }
-
-    renderChart(data, datasets);
   };
 
   return {
@@ -170,7 +156,7 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
       ctx = canvas.getContext("2d");
 
       scope.$watch('reactiveChart.data', function() {
-        clearVisualization();
+        clearChart();
         renderChart(scope);
       });
     }
