@@ -120,12 +120,12 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
 
       if (graphType === 'pie') {
         // `data` is just a single data point
-        isValidData = isPresent(data) && !_.isNaN(data);
+        isValidData = isPresent(data) && !_.isNaN(data) && _.isFinite(data) && data >= 0;
       }
       else {
         // `data` is an array of data points
         isValidData = _.all(data, function(datapoint) {
-          return isPresent(datapoint) && !_.isNaN(datapoint);
+          return isPresent(datapoint) && !_.isNaN(datapoint) && _.isFinite(datapoint);
         });
       }
       if (!isValidData || data.length === 0) {
