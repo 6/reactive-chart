@@ -110,42 +110,78 @@ angular.module('ReactiveChartModule', []).directive('reactiveChart', function() 
     if(!_.isArray(datasets)) {
       return;
     }
-    var newDatasets = [];
-    _.each(datasets, function(dataset) {
-      var areAnyNull = _.any(dataset, function(datapoint) {
-        return !isPresent(datapoint) || _.isNaN(datapoint);
-      });
-      if (!areAnyNull && dataset.length > 0) {
-        newDatasets.push(dataset);
-      }
-    });
-    datasets = newDatasets;
+    var chartDatasets = [];
+    _.each(datasets, function(data, i) {
+      var chartDataset,
+          isValidData,
+          hexString = getDistinctColor(i),
+          rgb = hexToRgb(hexString),
+          rgbString = [rgb.r, rgb.g, rgb.b].join(",");
 
-    if(datasets.length === 0) {
+      if (graphType === 'pie') {
+        // `data` is just a single data point
+        isValidData = isPresent(data) && !_.isNaN(data);
+      }
+      else {
+        // `data` is an array of data points
+        isValidData = _.all(data, function(datapoint) {
+          return isPresent(datapoint) && !_.isNaN(datapoint);
+        });
+      }
+      if (!isValidData || data.length === 0) {
+        return;
+      }
+
+      switch(graphType) {
+        case "bar":
+          chartDataset = {
+            fillColor : "rgba("+rgbString+",0.5)",
+            strokeColor : "rgba("+rgbString+",1)",
+            data: data
+          };
+          break;
+        case "pie":
+          chartDataset = {
+            color: "#"+hexString,
+            value: data
+          };
+          break;
+        default:
+          chartDataset = {
+            fillColor : "rgba("+rgbString+",0)",
+            strokeColor : "rgba("+rgbString+",1)",
+            pointColor : "rgba("+rgbString+",1)",
+            pointStrokeColor : "#fff",
+            data: data
+          };
+      }
+
+      chartDatasets.push(chartDataset);
+    });
+
+    if(chartDatasets.length === 0) {
       return;
     }
 
-    console.log(labels, datasets);
-
-    var chartData = {},
+    var chartDataObj = {},
         chartOptions,
         chartClass;
     if (graphType === 'pie') {
       chartClass = 'Pie';
-      chartData = datasets;
+      chartDataObj = chartDatasets;
       chartOptions = options || {};
     }
     else if (graphType === 'bar') {
       chartClass = 'Bar';
-      chartData = {labels: labels, datasets: datasets};
+      chartDataObj = {labels: labels, datasets: chartDatasets};
       chartOptions = options || {};
     }
     else {
       chartClass = 'Line';
-      chartData = {labels: labels, datasets: datasets};
+      chartDataObj = {labels: labels, datasets: chartDatasets};
       chartOptions = options || {bezierCurve: true, datasetStroke: true};
     }
-    new Chart(ctx)[chartClass](chartData, chartOptions);
+    new Chart(ctx)[chartClass](chartDataObj, chartOptions);
   };
 
   return {
