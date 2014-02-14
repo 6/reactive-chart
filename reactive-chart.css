@@ -1,22 +1,4 @@
 .reactive-chart {
-  position: relative;
   width: 100%;
   height: 100%;
-}
-
-.reactive-chart-spreadsheet {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 50%;
-  background: pink;
-}
-
-.reactive-chart-visualization {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 50%;
-  background: yellow;
 }
